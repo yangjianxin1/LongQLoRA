@@ -89,14 +89,15 @@ class LoRATrainer(Trainer):
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        # 收集所有参与训练的权重
-        trainable_param_names = [n for n, p in model.named_parameters() if p.requires_grad is True]
-        trainable_params = OrderedDict()
-        for n, p in model.state_dict().items():
-            if n in trainable_param_names:
-                trainable_params[n] = p
+        # 收集所有参与训练的权重，且排除lora权重
+        trainable_param_names = [n for n, p in model.named_parameters() if p.requires_grad is True and 'lora' not in n]
+        if len(trainable_param_names) > 0:
+            trainable_params = OrderedDict()
+            for n, p in model.state_dict().items():
+                if n in trainable_param_names:
+                    trainable_params[n] = p
 
-        trainable_file = join(output_dir, 'trainable_params.bin')
-        logger.info(f'Trainable params: {trainable_params.keys()}')
-        logger.info(f'Saving trainable params to {trainable_file}')
-        torch.save(trainable_params, trainable_file)
+            trainable_file = join(output_dir, 'trainable_params.bin')
+            logger.info(f'Trainable params: {trainable_params.keys()}')
+            logger.info(f'Saving trainable params to {trainable_file}')
+            torch.save(trainable_params, trainable_file)
