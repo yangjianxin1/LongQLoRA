@@ -1,6 +1,7 @@
 from transformers import AutoModelForCausalLM, BitsAndBytesConfig
 import torch
 from peft import PeftModel
+import os
 
 
 class ModelUtils(object):
@@ -33,6 +34,9 @@ class ModelUtils(object):
         )
         # 加载adapter
         if adapter_name_or_path is not None:
+            trainable_params_file = os.path.join(adapter_name_or_path, "trainable_params.bin")
+            if os.path.isfile(trainable_params_file):
+                model.load_state_dict(torch.load(trainable_params_file, map_location=model.device), strict=False)
             model = PeftModel.from_pretrained(model, adapter_name_or_path)
 
         return model
