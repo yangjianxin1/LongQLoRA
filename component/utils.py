@@ -6,7 +6,7 @@ from peft import PeftModel
 class ModelUtils(object):
 
     @classmethod
-    def load_model(cls, model_name_or_path, load_in_4bit=False, adapter_name_or_path=None):
+    def load_model(cls, model_name_or_path, config=None, load_in_4bit=False, adapter_name_or_path=None):
         # 是否使用4bit量化进行推理
         if load_in_4bit:
             quantization_config = BitsAndBytesConfig(
@@ -23,6 +23,7 @@ class ModelUtils(object):
         # 加载base model
         model = AutoModelForCausalLM.from_pretrained(
             model_name_or_path,
+            config=config,
             load_in_4bit=load_in_4bit,
             trust_remote_code=True,
             low_cpu_mem_usage=True,
@@ -30,7 +31,6 @@ class ModelUtils(object):
             device_map='auto',
             quantization_config=quantization_config
         )
-
         # 加载adapter
         if adapter_name_or_path is not None:
             model = PeftModel.from_pretrained(model, adapter_name_or_path)

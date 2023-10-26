@@ -123,7 +123,7 @@ def load_model_and_tokenizer(args, training_args):
     if orig_ctx_len and args.model_max_length > orig_ctx_len:
         scaling_factor = float(math.ceil(args.model_max_length / orig_ctx_len))
         config.rope_scaling = {"type": "linear", "factor": scaling_factor}
-    logger.info(f'Change model_max_length from {orig_ctx_len} to {getattr(config, "max_position_embeddings")}')
+    logger.info(f'Change model_max_length from {orig_ctx_len} to {args.model_max_length}')
 
     # 设置device_map，以适配多卡训练
     local_rank = int(os.environ.get('LOCAL_RANK', '0'))
