@@ -88,6 +88,7 @@ def find_all_linear_names(model):
 def setup_everything():
     parser = argparse.ArgumentParser()
     parser.add_argument("--train_args_file", type=str, default='./train_args/llama2-7b-pretrain.yaml', help="")
+    parser.add_argument("--local_rank", type=int, default=0, help="")
     args = parser.parse_args()
     train_args_file = args.train_args_file
     # 读取训练的参数配置

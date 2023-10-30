@@ -1,6 +1,7 @@
-from transformers import AutoTokenizer, TextIteratorStreamer
+from transformers import AutoTokenizer, TextIteratorStreamer, AutoConfig
 import torch
 from threading import Thread
+import math
 
 import sys
 sys.path.append("../../")
@@ -11,6 +12,7 @@ from component.utils import ModelUtils
 
 
 def main():
+    context_size = 8192
     # 使用合并后的模型进行推理
     model_name_or_path = 'path-to-base-model'
     adapter_name_or_path = None
@@ -29,9 +31,16 @@ def main():
         'repetition_penalty': 1.0,
         'do_sample': True
     }
+    # Set RoPE scaling factor
+    config = AutoConfig.from_pretrained(model_name_or_path)
+    orig_ctx_len = getattr(config, "max_position_embeddings", None)  # this value should be 4096 for LLaMA2 models
+    if orig_ctx_len and context_size > orig_ctx_len:
+        scaling_factor = float(math.ceil(context_size / orig_ctx_len))
+        config.rope_scaling = {"type": "linear", "factor": scaling_factor}
     # 加载模型
     model = ModelUtils.load_model(
         model_name_or_path,
+        config=config,
         load_in_4bit=load_in_4bit,
         adapter_name_or_path=adapter_name_or_path
     ).eval()
