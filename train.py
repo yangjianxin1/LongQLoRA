@@ -17,8 +17,8 @@ from collections import defaultdict
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from transformers import AutoTokenizer
 from transformers import AutoModelForCausalLM, LlamaForCausalLM
-from component.collator import PretrainCollator
-from component.dataset import PretrainDataset
+from component.collator import PretrainCollator, SFTCollator
+from component.dataset import PretrainDataset, VicunaSFTDataset
 from component.argument import LongQLoRAArguments
 from component.trainer import LoRATrainer
 from component.loss import CausalLMLoss
@@ -224,16 +224,18 @@ def init_components(args, training_args):
     loss_func = CausalLMLoss(ignore_index=-100)
 
     # 加载训练集和验证集
-    train_dataset = PretrainDataset(args.train_file, tokenizer, args.max_seq_length)
-    eval_dataset = None if args.eval_file is None else PretrainDataset(args.eval_file, tokenizer, args.max_seq_length)
-    data_collator = PretrainCollator(tokenizer, args.max_seq_length, -100)
+    if args.sft:
+        train_dataset = VicunaSFTDataset(args.train_file, tokenizer, args.max_seq_length)
+        data_collator = SFTCollator(tokenizer, args.max_seq_length, -100)
+    else:
+        train_dataset = PretrainDataset(args.train_file, tokenizer, args.max_seq_length)
+        data_collator = PretrainCollator(tokenizer, args.max_seq_length, -100)
 
     # 初始化Trainer
     trainer = LoRATrainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=eval_dataset,
         tokenizer=tokenizer,
         data_collator=data_collator,
         compute_loss=loss_func

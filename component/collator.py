@@ -45,3 +45,27 @@ class EvalCollator(Collator):
             'labels': labels
         }
         return inputs
+
+
+class SFTCollator(Collator):
+
+    def __call__(self, batch: List[Dict[str, Any]]) -> Dict[str, Any]:
+        input_ids = []
+        attention_mask = []
+        labels = []
+
+        for x in batch:
+            input_ids.append(x['input_ids'])
+            attention_mask.append(x['attention_mask'])
+            labels.append(x['labels'])
+
+        # 将list转换为tensor，得到最终的的模型输入
+        input_ids = torch.tensor(input_ids, dtype=torch.long)
+        attention_mask = torch.tensor(attention_mask, dtype=torch.long)
+        labels = torch.tensor(labels, dtype=torch.long)
+        inputs = {
+            'input_ids': input_ids,
+            'attention_mask': attention_mask,
+            'labels': labels
+        }
+        return inputs
