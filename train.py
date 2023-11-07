@@ -252,7 +252,7 @@ def main():
     logger.info("*** starting training ***")
     train_result = trainer.train()
     # 保存最后的checkpoint
-    trainer.save_model(training_args.output_dir)  # Save the tokenizer too
+    # trainer.save_model(training_args.output_dir)  # Save the tokenizer too
     # 保存训练指标
     metrics = train_result.metrics
     trainer.log_metrics("train", metrics)
