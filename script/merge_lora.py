@@ -2,6 +2,8 @@ from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
 import torch
 import os
+import math
+from loguru import logger
 """
 使用该脚本，将lora的权重合并到base model中
 """
@@ -9,10 +11,17 @@ import os
 
 def merge_lora_to_base_model():
     model_name_or_path = 'NousResearch/Llama-2-7b-hf'
-    adapter_name_or_path = 'path-to-lora-8k'
+    adapter_name_or_path = 'LongQLoRA-Llama2-7b-8k-lora'
     save_path = '../checkpoint/llama2-7b-longqlora-8k'
 
     config = AutoConfig.from_pretrained(model_name_or_path)
+    # 修改RoPE的position最大长度
+    model_max_length = 8192
+    orig_ctx_len = getattr(config, "max_position_embeddings", None)
+    if orig_ctx_len and model_max_length > orig_ctx_len:
+        scaling_factor = float(math.ceil(model_max_length / orig_ctx_len))
+        config.rope_scaling = {"type": "linear", "factor": scaling_factor}
+        logger.info(f'Change model_max_length from {orig_ctx_len} to {model_max_length}')
     tokenizer = AutoTokenizer.from_pretrained(
         model_name_or_path,
         trust_remote_code=True,
@@ -22,6 +31,7 @@ def merge_lora_to_base_model():
     # 加载base model
     model = AutoModelForCausalLM.from_pretrained(
         model_name_or_path,
+        config=config,
         trust_remote_code=True,
         low_cpu_mem_usage=True,
         torch_dtype=torch.float16,
