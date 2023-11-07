@@ -18,9 +18,9 @@ class LongQLoRAArguments:
     })
     eval_file: str = field(default=None, metadata={"help": "评测集路径"})
     use_flash_attn: bool = field(default=False, metadata={"help": "训练时是否使用flash attention"})
-    train_embedding: bool = field(default=True, metadata={"help": "词表权重是否参与训练"})
-    train_norm: bool = field(default=True, metadata={"help": "norm权重是否参与训练"})
-    lora_rank: Optional[int] = field(default=8, metadata={"help": "lora rank"})
+    train_embedding: bool = field(default=False, metadata={"help": "词表权重是否参与训练"})
+    train_norm: bool = field(default=False, metadata={"help": "norm权重是否参与训练"})
+    lora_rank: Optional[int] = field(default=64, metadata={"help": "lora rank"})
     lora_alpha: Optional[int] = field(default=16, metadata={"help": "lora alpha"})
     lora_dropout: Optional[float] = field(default=0.05, metadata={"help": "lora dropout"})
 
