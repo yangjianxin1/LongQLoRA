@@ -11,21 +11,21 @@ from component.utils import ModelUtils
 def main():
     context_size = 8192
     # 使用合并后的模型进行推理
-    model_name_or_path = 'lmsys/vicuna-13b-v1.5'
+    model_name_or_path = 'LongQLoRA-Vicuna-13b-8k'
     adapter_name_or_path = None
 
     # 使用base model和adapter进行推理
     # model_name_or_path = 'lmsys/vicuna-13b-v1.5'
-    # adapter_name_or_path = 'YeungNLP/vicuna-13b-v1.5-longqlora-8k'
+    # adapter_name_or_path = 'LongQLoRA-Vicuna-13b-8k-lora'
 
     template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.\nUSER: {input}\nASSISTANT: "
     # 是否使用4bit进行推理，能够节省很多显存，但效果可能会有一定的下降
-    load_in_4bit = True
+    load_in_4bit = False
     # 生成超参配置
     gen_kwargs = {
         'max_new_tokens': 500,
-        'top_p': 0.8,
-        'temperature': 1.0,
+        'top_p': 0.9,
+        'temperature': 0.35,
         'repetition_penalty': 1.0,
         'do_sample': True
     }

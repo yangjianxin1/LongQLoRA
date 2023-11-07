@@ -14,12 +14,12 @@ from component.utils import ModelUtils
 def main():
     context_size = 8192
     # 使用合并后的模型进行推理
-    model_name_or_path = 'path-to-base-model'
+    model_name_or_path = 'YeungNLP/LongQLoRA-Llama2-7b-8k'
     adapter_name_or_path = None
 
     # 使用base model和adapter进行推理
-    # model_name_or_path = 'path-to-base-model'
-    # adapter_name_or_path = 'path-to-lora'
+    # model_name_or_path = 'NousResearch/Llama-2-7b-hf'
+    # adapter_name_or_path = 'LongQLoRA-Llama2-7b-8k-lora'
 
     # 是否使用4bit进行推理，能够节省很多显存，但效果可能会有一定的下降
     load_in_4bit = False
