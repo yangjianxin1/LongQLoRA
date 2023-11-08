@@ -6,7 +6,7 @@
 
 ## Introduction
 LongQLoRA is a memory-efficient and effective method to extend context length of Large Language Models with less training GPUs. 
-On a single 32GB V100 GPU, LongQLoRA can extend the context length of LLaMA2 7B and 13B from 4096 to 8192 and even to 12k.
+**On a single 32GB V100 GPU**, LongQLoRA can extend the context length of LLaMA2 7B and 13B from 4096 to 8192 and even to 12k.
 LongQLoRA achieves competitive perplexity performance on PG19 and Proof-pile dataset after only 1000 finetuning steps, our model outperforms LongLoRA and is very close to MPT-7B-8K.
 LongQLoRA combines the advantages of Position Interpolation, QLoRA and Shift Short Attention.
 
