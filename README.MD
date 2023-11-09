@@ -1,14 +1,13 @@
-# LongQLoRA: Efficient and Effective Method to Extend Context Length of LLM
+# LongQLoRA: Efficient and Effective Method to Extend Context Length of LLMs
 
-[//]: # (## Technical Report)
+## Technical Report
 
-[//]: # (Technical Report: [LongQLoRA: Efficient and Effective Method to Extend Context Length of Large Language Models]&#40;&#41;)
+Technical Report: [LongQLoRA: Efficient and Effective Method to Extend Context Length of Large Language Models](https://arxiv.org/abs/2311.04879)
 
 ## Introduction
 LongQLoRA is a memory-efficient and effective method to extend context length of Large Language Models with less training GPUs. 
 **On a single 32GB V100 GPU**, LongQLoRA can extend the context length of LLaMA2 7B and 13B from 4096 to 8192 and even to 12k.
 LongQLoRA achieves competitive perplexity performance on PG19 and Proof-pile dataset after only 1000 finetuning steps, our model outperforms LongLoRA and is very close to MPT-7B-8K.
-LongQLoRA combines the advantages of Position Interpolation, QLoRA and Shift Short Attention.
 
 
  Evaluation perplexity on PG19 validation and Proof-pile test datasets in evaluation context length of 8192:
@@ -136,4 +135,19 @@ Examples of short context generartion, model keep the performance of short instr
 <img src="figure/shortdemo.png" width="800">
 
 
-[//]: # (## Citation)
+## Citation
+```text
+@misc{yang2023longqlora,
+      title={LongQLoRA: Efficient and Effective Method to Extend Context Length of Large Language Models}, 
+      author={Jianxin Yang},
+      year={2023},
+      eprint={2311.04879},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
+
+## Acknowledgement
+- This work combines the advantages of [QLoRA](https://github.com/artidoro/qlora), [Position Interpolation](https://arxiv.org/abs/2306.15595) and [LongLoRA](https://github.com/dvlab-research/LongLoRA)
+- The code of Shift Short Attention is implemented by [LongLoRA](https://github.com/dvlab-research/LongLoRA)
+- The training code is modified upon [Firefly](https://github.com/yangjianxin1/Firefly)
