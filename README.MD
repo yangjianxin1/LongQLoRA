@@ -96,7 +96,7 @@ Download the evaluation dataset tokenized by LLaMA2 by [LongLoRA](https://github
 | 🤗[PG19-test.bin](https://huggingface.co/datasets/YeungNLP/LongQLoRA-Dataset)       |
 | 🤗[Proof-pile-test.bin](https://huggingface.co/datasets/YeungNLP/LongQLoRA-Dataset) |
 
-Evaluate the perplexity of models. You can set `low_rank_training` as True to save memory:
+Evaluate the perplexity of models. You can set `load_in_4bit` as True to save memory:
 ```bash
 cd script/evaluate
 python evaluate.py \
